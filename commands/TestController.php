@@ -84,7 +84,7 @@ class TestController extends Controller
     }
 
     /**
-     * Получаем города из списка с адресами
+     * Получаем города из списка ID с адресами
      * @throws QueryRelationManagerException
      */
     public function actionCity()
