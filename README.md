@@ -1,5 +1,8 @@
 # QueryRelationManager demo
 
+Демонстрация работы расширения **yii2-query-relation-manager**
+https://github.com/Smoren/yii2-query-relation-manager
+
 ### Install
 ```
 composer install
