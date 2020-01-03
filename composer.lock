@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70c76473ddf34c7c18eecae0c31c2050",
+    "content-hash": "4192ecc9b55ca59852a913d885d9a716",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -330,16 +330,16 @@
         },
         {
             "name": "smoren/yii2-query-relation-manager",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Smoren/yii2-query-relation-manager.git",
-                "reference": "121bb56e85b3ba06bcd7d4482c5ed54ccacdb84f"
+                "reference": "48810ce583f5ae79b330c326d3c924652be6b9c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Smoren/yii2-query-relation-manager/zipball/121bb56e85b3ba06bcd7d4482c5ed54ccacdb84f",
-                "reference": "121bb56e85b3ba06bcd7d4482c5ed54ccacdb84f",
+                "url": "https://api.github.com/repos/Smoren/yii2-query-relation-manager/zipball/48810ce583f5ae79b330c326d3c924652be6b9c9",
+                "reference": "48810ce583f5ae79b330c326d3c924652be6b9c9",
                 "shasum": ""
             },
             "require": {
@@ -371,7 +371,7 @@
                 "relation",
                 "yii2"
             ],
-            "time": "2020-01-03T10:51:42+00:00"
+            "time": "2020-01-03T15:32:35+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4176,7 +4176,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=7.2.0"
     },
     "platform-dev": []
 }
