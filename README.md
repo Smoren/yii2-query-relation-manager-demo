@@ -69,6 +69,10 @@ Array
                             [id] => 2
                             [address_id] => 1
                             [name] => Tverskaya cafe
+                            [comments] => Array
+                                (
+                                )
+
                         )
 
                 )
@@ -127,6 +131,17 @@ Array
                 (
                     [0] => Array
                         (
+                            [id] => 4
+                            [address_id] => 3
+                            [name] => Hostel on Mayakovskaya
+                            [comments] => Array
+                                (
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
                             [id] => 5
                             [address_id] => 3
                             [name] => Mayakovskiy Store
@@ -143,13 +158,6 @@ Array
 
                                 )
 
-                        )
-
-                    [1] => Array
-                        (
-                            [id] => 4
-                            [address_id] => 3
-                            [name] => Hostel on Mayakovskaya
                         )
 
                 )
@@ -240,9 +248,6 @@ Array
 
                 )
 
-            [comments_count] => 2
-            [mark_five_count] => 1
-            [mark_average] => 4
             [address] => Array
                 (
                     [id] => 1
@@ -256,6 +261,9 @@ Array
 
                 )
 
+            [comments_count] => 2
+            [mark_five_count] => 1
+            [mark_average] => 4
         )
 
     [1] => Array
@@ -276,9 +284,6 @@ Array
 
                 )
 
-            [comments_count] => 1
-            [mark_five_count] => 1
-            [mark_average] => 5
             [address] => Array
                 (
                     [id] => 2
@@ -292,6 +297,9 @@ Array
 
                 )
 
+            [comments_count] => 1
+            [mark_five_count] => 1
+            [mark_average] => 5
         )
 
     [2] => Array
@@ -312,9 +320,6 @@ Array
 
                 )
 
-            [comments_count] => 1
-            [mark_five_count] => 0
-            [mark_average] => 4
             [address] => Array
                 (
                     [id] => 3
@@ -328,6 +333,9 @@ Array
 
                 )
 
+            [comments_count] => 1
+            [mark_five_count] => 0
+            [mark_average] => 4
         )
 
     [3] => Array
@@ -348,9 +356,6 @@ Array
 
                 )
 
-            [comments_count] => 1
-            [mark_five_count] => 0
-            [mark_average] => 3
             [address] => Array
                 (
                     [id] => 4
@@ -364,6 +369,9 @@ Array
 
                 )
 
+            [comments_count] => 1
+            [mark_five_count] => 0
+            [mark_average] => 3
         )
 
 )
@@ -378,6 +386,16 @@ php yii test/city
 Array
 (
     [0] => Array
+        (
+            [id] => 3
+            [name] => Samara
+            [addresses] => Array
+                (
+                )
+
+        )
+
+    [1] => Array
         (
             [id] => 2
             [name] => St. Petersburg
@@ -399,12 +417,6 @@ Array
 
                 )
 
-        )
-
-    [1] => Array
-        (
-            [id] => 3
-            [name] => Samara
         )
 
 )

@@ -95,7 +95,7 @@ class TestController extends Controller
         $result = QueryRelationManager::select(City::class, 'c')
             ->withMultiple('addresses', Address::class, 'a', 'c', 'city_id', 'id')
             ->filter(function(Query $q) use ($cityIds) {
-                $q->andWhere(['c.id' => $cityIds]);
+                $q->andWhere(['c.id' => $cityIds])->orderBy(['a.id' => SORT_ASC]);
             })
             ->all();
 
