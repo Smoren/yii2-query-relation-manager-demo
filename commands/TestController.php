@@ -11,8 +11,10 @@ use app\models\Address;
 use app\models\City;
 use app\models\Comment;
 use app\models\Place;
+use Smoren\Yii2\QueryRelationManager\QueryRelationDataProvider;
 use Smoren\Yii2\QueryRelationManager\QueryRelationManager;
 use Smoren\Yii2\QueryRelationManager\QueryRelationManagerException;
+use Yii;
 use yii\console\Controller;
 use yii\db\Query;
 
@@ -100,5 +102,25 @@ class TestController extends Controller
             ->all();
 
         print_r($result);
+    }
+
+    /**
+     * @throws QueryRelationManagerException
+     */
+    public function actionProvider()
+    {
+        $qrm = QueryRelationManager::select(City::class, 'c')
+            ->withMultiple('addresses', Address::class, 'a', 'c', 'city_id', 'id');
+
+        $dataProvider = new QueryRelationDataProvider([
+            'queryRelationManager' => $qrm,
+            'db' => Yii::$app->db,
+            'pagination' => [
+                'pageSize' => 2,
+                'page' => 0,
+            ],
+        ]);
+
+        print_r($dataProvider->getModels());
     }
 }
