@@ -81,9 +81,10 @@ class ProfileController extends Controller
                 'page' => 0,
             ],
         ]);
+        $totalCount = $dataProvider->getTotalCount();
 
         $rows = $dataProvider->getModels();
-        $this->log('ActiveRecord joinWith', $ph->getTimeSpent(), count($rows));
+        $this->log('ActiveRecord joinWith', $ph->getTimeSpent(), count($rows), $totalCount);
 
         $ph = ProfilerHelper::start();
         $qrm = QueryRelationManager::select(Address::class, 'a')
@@ -99,8 +100,9 @@ class ProfileController extends Controller
             ],
         ]);
         $rows = $dataProvider->getModels();
+        $totalCount = $dataProvider->getTotalCount();
 
-        $this->log('QueryRelationManager', $ph->getTimeSpent(), count($rows));
+        $this->log('QueryRelationManager', $ph->getTimeSpent(), count($rows), $totalCount);
 
         $this->delAddresses();
     }
@@ -135,13 +137,17 @@ class ProfileController extends Controller
      * @param string $who
      * @param float $time
      * @param int $foundCount
+     * @param int|null $totalCount
      */
-    protected function log(string $who, float $time, ?int $foundCount = null)
+    protected function log(string $who, float $time, ?int $foundCount = null, ?int $totalCount = null)
     {
         $time = round($time, 4);
         echo "{$who}:\t{$time}";
         if($foundCount !== null) {
             echo " | found: {$foundCount}";
+        }
+        if($foundCount !== null) {
+            echo " | total count: {$totalCount}";
         }
         echo "\n";
     }
