@@ -29,85 +29,88 @@ class ProfileController extends Controller
     /**
      * Выбираем адреса с городом, местами и комментариями о местах
      * @throws QueryRelationManagerException
+     * @throws Exception
      */
     public function actionAddress()
     {
-        $count = 1;
+        $this->genAddresses();
 
         $ph = ProfilerHelper::start();
-        for($i=0; $i<$count; $i++) {
-            Address::find()
-                ->joinWith('city')
-                ->joinWith('places')
-                ->joinWith('places.comments')
-                ->asArray()
-                ->all();
-        }
+        Address::find()
+            ->joinWith('city')
+            ->joinWith('places')
+            ->joinWith('places.comments')
+            ->asArray()
+            ->all();
         $this->log('ActiveRecord joinWith', $ph->getTimeSpent());
 
         $ph = ProfilerHelper::start();
-        for($i=0; $i<$count; $i++) {
-            QueryRelationManager::select(Address::class, 'a')
-                ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
-                ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
-                ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id')
-                ->all();
-        }
+        QueryRelationManager::select(Address::class, 'a')
+            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
+            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
+            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id')
+            ->all();
         $this->log('QueryRelationManager', $ph->getTimeSpent());
+
+        $this->delAddresses();
     }
 
     /**
      * Выбираем адреса с городом, местами и комментариями о местах
      * @throws QueryRelationManagerException
+     * @throws Exception
      */
     public function actionProvider()
     {
-        $count = 1;
+        $this->genAddresses();
+
+        $pageSize = 100;
+        echo "page size: {$pageSize}\n";
 
         $ph = ProfilerHelper::start();
-        for($i=0; $i<$count; $i++) {
-            $q = Address::find()
-                ->joinWith('city')
-                ->joinWith('places')
-                ->joinWith('places.comments')
-                ->asArray();
+        $q = Address::find()
+            ->joinWith('city')
+            ->joinWith('places')
+            ->joinWith('places.comments')
+            ->asArray();
 
-            $dataProvider = new ActiveDataProvider([
-                'query' => $q,
-                'pagination' => [
-                    'pageSize' => 100,
-                    'page' => 100,
-                ],
-            ]);
-            $dataProvider->getModels();
-        }
-        $this->log('ActiveRecord joinWith', $ph->getTimeSpent());
+        $dataProvider = new ActiveDataProvider([
+            'query' => $q,
+            'pagination' => [
+                'pageSize' => $pageSize,
+                'page' => 0,
+            ],
+        ]);
+
+        $rows = $dataProvider->getModels();
+        $this->log('ActiveRecord joinWith', $ph->getTimeSpent(), count($rows));
 
         $ph = ProfilerHelper::start();
-        for($i=0; $i<$count; $i++) {
-            $qrm = QueryRelationManager::select(Address::class, 'a')
-                ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
-                ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
-                ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id');
+        $qrm = QueryRelationManager::select(Address::class, 'a')
+            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
+            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
+            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id');
 
-            $dataProvider = new QueryRelationDataProvider([
-                'queryRelationManager' => $qrm,
-                'pagination' => [
-                    'pageSize' => 100,
-                    'page' => 100,
-                ],
-            ]);
-            $dataProvider->getModels();
-        }
+        $dataProvider = new QueryRelationDataProvider([
+            'queryRelationManager' => $qrm,
+            'pagination' => [
+                'pageSize' => $pageSize,
+                'page' => 0,
+            ],
+        ]);
+        $rows = $dataProvider->getModels();
 
-        $this->log('QueryRelationManager', $ph->getTimeSpent());
+        $this->log('QueryRelationManager', $ph->getTimeSpent(), count($rows));
+
+        $this->delAddresses();
     }
 
     /**
      * @throws Exception
      */
-    public function actionGen()
+    protected function genAddresses()
     {
+        echo "generating addresses...\n";
         for($j=0; $j<100; $j++) {
             $testBuf = [];
             for($i=0; $i<10000; $i++) {
@@ -115,22 +118,31 @@ class ProfileController extends Controller
             }
             Yii::$app->db->createCommand()->batchInsert('address', ['city_id', 'name'], $testBuf)->execute();
         }
+        echo "ok!\n";
     }
 
     /**
      * @throws Exception
      */
-    public function actionDel()
+    protected function delAddresses()
     {
+        echo "removing addresses...\n";
         Yii::$app->db->createCommand('DELETE FROM address where id > 4')->execute();
+        echo "ok!\n";
     }
 
     /**
      * @param string $who
      * @param float $time
+     * @param int $foundCount
      */
-    protected function log(string $who, float $time)
+    protected function log(string $who, float $time, ?int $foundCount = null)
     {
-        echo "{$who}:\t{$time}\n";
+        $time = round($time, 4);
+        echo "{$who}:\t{$time}";
+        if($foundCount !== null) {
+            echo " | found: {$foundCount}";
+        }
+        echo "\n";
     }
 }
