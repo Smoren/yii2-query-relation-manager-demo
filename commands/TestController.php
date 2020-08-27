@@ -14,6 +14,7 @@ use app\models\Place;
 use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationDataProvider;
 use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
 use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
+use Smoren\Yii2\QueryRelationManager\Pdo\QueryWrapper;
 use Yii;
 use yii\console\Controller;
 use yii\db\Query;
@@ -130,6 +131,8 @@ class TestController extends Controller
      */
     public function actionPdo()
     {
+        QueryWrapper::setDbConfig(Yii::$app->db->dsn, Yii::$app->db->username, Yii::$app->db->password);
+
         $result = \Smoren\Yii2\QueryRelationManager\Pdo\QueryRelationManager::select('address', 'a')
             ->withSingle('city', 'city', 'c', 'a', 'id', 'city_id')
             ->withMultiple('places', 'place', 'p', 'a', 'address_id', 'id')
