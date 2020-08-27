@@ -123,4 +123,19 @@ class TestController extends Controller
 
         print_r($dataProvider->getModels());
     }
+
+    /**
+     * Выбираем адреса с городом, местами и комментариями о местах
+     * @throws QueryRelationManagerException
+     */
+    public function actionPdo()
+    {
+        $result = \Smoren\Yii2\QueryRelationManager\Pdo\QueryRelationManager::select('address', 'a')
+            ->withSingle('city', 'city', 'c', 'a', 'id', 'city_id')
+            ->withMultiple('places', 'place', 'p', 'a', 'address_id', 'id')
+            ->withMultiple('comments', 'comment', 'cm', 'p', 'place_id', 'id')
+            ->all();
+
+        print_r($result);
+    }
 }
