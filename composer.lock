@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6485645c4fbd66b218fc3de7f17c683f",
+    "content-hash": "5d52b80b0b24384d9b89a5aedefe11b0",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -393,16 +393,16 @@
         },
         {
             "name": "smoren/yii2-query-relation-manager",
-            "version": "dev-master",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Smoren/yii2-query-relation-manager.git",
-                "reference": "5ff3b4da773d297c3276fa5ce539c4555835a87f"
+                "reference": "1cf4f352753ef708e461200a7958441cebae0d97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Smoren/yii2-query-relation-manager/zipball/5ff3b4da773d297c3276fa5ce539c4555835a87f",
-                "reference": "5ff3b4da773d297c3276fa5ce539c4555835a87f",
+                "url": "https://api.github.com/repos/Smoren/yii2-query-relation-manager/zipball/1cf4f352753ef708e461200a7958441cebae0d97",
+                "reference": "1cf4f352753ef708e461200a7958441cebae0d97",
                 "shasum": ""
             },
             "require": {
@@ -434,7 +434,7 @@
                 "relation",
                 "yii2"
             ],
-            "time": "2020-08-25T09:20:05+00:00"
+            "time": "2020-08-25T09:29:52+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1327,16 +1327,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.6",
+            "version": "4.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "5515b6a6c6f1e1c909aaff2e5f3a15c177dfd1a9"
+                "reference": "d972dc301e418307ccbac5023185281996f44c47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/5515b6a6c6f1e1c909aaff2e5f3a15c177dfd1a9",
-                "reference": "5515b6a6c6f1e1c909aaff2e5f3a15c177dfd1a9",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/d972dc301e418307ccbac5023185281996f44c47",
+                "reference": "d972dc301e418307ccbac5023185281996f44c47",
                 "shasum": ""
             },
             "require": {
@@ -1414,7 +1414,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2020-06-07T16:31:51+00:00"
+            "time": "2020-08-24T06:24:38+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -5011,7 +5011,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "smoren/yii2-query-relation-manager": 20
+        "codeception/codeception": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
