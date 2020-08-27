@@ -12,8 +12,8 @@ use app\models\City;
 use app\models\Comment;
 use app\models\Place;
 use app\helpers\ProfilerHelper;
-use Smoren\Yii2\QueryRelationManager\QueryRelationManager;
-use Smoren\Yii2\QueryRelationManager\QueryRelationManagerException;
+use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
+use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
 use yii\console\Controller;
 
 /**
