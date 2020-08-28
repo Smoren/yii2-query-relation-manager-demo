@@ -102,7 +102,26 @@ class ProfileController extends Controller
         $rows = $dataProvider->getModels();
         $totalCount = $dataProvider->getTotalCount();
 
-        $this->log('QueryRelationManager', $ph->getTimeSpent(), count($rows), $totalCount);
+        $this->log('QRM with totalCount', $ph->getTimeSpent(), count($rows), $totalCount);
+
+        $ph = ProfilerHelper::start();
+        $qrm = QueryRelationManager::select(Address::class, 'a')
+            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
+            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
+            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id');
+
+        $dataProvider = new QueryRelationDataProvider([
+            'queryRelationManager' => $qrm,
+            'withoutTotalCount' => true,
+            'pagination' => [
+                'pageSize' => $pageSize,
+                'page' => 0,
+            ],
+        ]);
+        $rows = $dataProvider->getModels();
+        $totalCount = $dataProvider->getTotalCount();
+
+        $this->log('QRM without totalCount', $ph->getTimeSpent(), count($rows), $totalCount);
 
         $this->delAddresses();
     }
