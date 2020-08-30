@@ -12,9 +12,9 @@ use app\models\City;
 use app\models\Comment;
 use app\models\Place;
 use app\helpers\ProfilerHelper;
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationDataProvider;
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
+use app\qrm\ActiveRecord\QueryRelationDataProvider;
+use app\qrm\ActiveRecord\QueryRelationManager;
+use app\qrm\Base\QueryRelationManagerException;
 use Yii;
 use yii\console\Controller;
 use yii\data\ActiveDataProvider;
@@ -46,9 +46,9 @@ class ProfileController extends Controller
 
         $ph = ProfilerHelper::start();
         QueryRelationManager::select(Address::class, 'a')
-            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
-            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
-            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id')
+            ->withSingle('city', City::class, 'c', 'a', ['id' => 'city_id'])
+            ->withMultiple('places', Place::class, 'p', 'a', ['address_id' => 'id'])
+            ->withMultiple('comments', Comment::class, 'cm', 'p', ['place_id' => 'id'])
             ->all();
         $this->log('QueryRelationManager', $ph->getTimeSpent());
 
@@ -88,9 +88,9 @@ class ProfileController extends Controller
 
         $ph = ProfilerHelper::start();
         $qrm = QueryRelationManager::select(Address::class, 'a')
-            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
-            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
-            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id');
+            ->withSingle('city', City::class, 'c', 'a', ['id' => 'city_id'])
+            ->withMultiple('places', Place::class, 'p', 'a', ['address_id' => 'id'])
+            ->withMultiple('comments', Comment::class, 'cm', 'p', ['place_id' => 'id']);
 
         $dataProvider = new QueryRelationDataProvider([
             'queryRelationManager' => $qrm,
@@ -106,9 +106,9 @@ class ProfileController extends Controller
 
         $ph = ProfilerHelper::start();
         $qrm = QueryRelationManager::select(Address::class, 'a')
-            ->withSingle('city', City::class, 'c', 'a', 'id', 'city_id')
-            ->withMultiple('places', Place::class, 'p', 'a', 'address_id', 'id')
-            ->withMultiple('comments', Comment::class, 'cm', 'p', 'place_id', 'id');
+            ->withSingle('city', City::class, 'c', 'a', ['id' => 'city_id'])
+            ->withMultiple('places', Place::class, 'p', 'a', ['address_id' => 'id'])
+            ->withMultiple('comments', Comment::class, 'cm', 'p', ['place_id' => 'id']);
 
         $dataProvider = new QueryRelationDataProvider([
             'queryRelationManager' => $qrm,

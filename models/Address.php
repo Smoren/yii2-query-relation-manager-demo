@@ -20,10 +20,10 @@ class Address extends ActiveRecord
 {
     use ActiveRecordTrait;
 
-    public static function primaryKey()
-    {
-        return ['id', 'city_id'];
-    }
+    //public static function primaryKey()
+    //{
+    //    return ['id', 'city_id'];
+    //}
 
     /**
      * {@inheritdoc}
