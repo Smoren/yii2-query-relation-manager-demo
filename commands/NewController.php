@@ -11,6 +11,7 @@ use app\models\Place;
 use app\qrm\ActiveRecord\QueryRelationDataProvider;
 use app\qrm\ActiveRecord\QueryRelationManager;
 use app\qrm\Base\QueryRelationManagerException;
+use app\qrm\Pdo\QueryWrapper;
 use Yii;
 use yii\console\Controller;
 use yii\db\Query;
@@ -18,7 +19,7 @@ use yii\db\Query;
 class NewController extends Controller
 {
     /**
-     * @throws \app\qrm\Base\QueryRelationManagerException
+     * @throws QueryRelationManagerException
      */
     public function actionAddress()
     {
@@ -68,7 +69,7 @@ class NewController extends Controller
     }
 
     /**
-     * @throws \app\qrm\Base\QueryRelationManagerException
+     * @throws QueryRelationManagerException
      */
     public function actionProvider()
     {
@@ -87,7 +88,7 @@ class NewController extends Controller
         print_r($dataProvider->getModels());
     }
     /**
-     * @throws \app\qrm\Base\QueryRelationManagerException
+     * @throws QueryRelationManagerException
      */
     public function actionProviderAddr()
     {
@@ -109,12 +110,40 @@ class NewController extends Controller
     }
 
     /**
+     * @throws QueryRelationManagerException
+     */
+    public function actionWithCity()
+    {
+        $cities = City::select('c')
+            ->with('addresses', 'a')
+            ->with('places', 'p', 'a')
+            ->with('comments', 'cm', 'p')
+            ->all();
+
+        print_r($cities);
+    }
+
+    /**
+     * @throws QueryRelationManagerException
+     */
+    public function actionWithAddress()
+    {
+        $cities = Address::select('a')
+            ->with('city', 'c')
+            ->with('places', 'p')
+            ->with('comments', 'cm', 'p')
+            ->all();
+
+        print_r($cities);
+    }
+
+    /**
      * Выбираем адреса с городом, местами и комментариями о местах
      * @throws QueryRelationManagerException
      */
     public function actionPdo()
     {
-        \app\qrm\Pdo\QueryWrapper::setDbConfig(Yii::$app->db->dsn, Yii::$app->db->username, Yii::$app->db->password);
+        QueryWrapper::setDbConfig(Yii::$app->db->dsn, Yii::$app->db->username, Yii::$app->db->password);
 
         $result = \app\qrm\Pdo\QueryRelationManager::select('address', 'a')
             ->withSingle('city', 'city', 'c', 'a', ['id' => 'city_id'])

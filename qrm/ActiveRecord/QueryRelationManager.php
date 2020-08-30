@@ -5,8 +5,8 @@ namespace app\qrm\ActiveRecord;
 
 
 use app\qrm\Base\QueryRelationManagerBase;
+use app\qrm\Base\QueryRelationManagerException;
 use app\qrm\Base\QueryWrapperInterface;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -17,75 +17,68 @@ use yii\db\ActiveRecord;
  */
 class QueryRelationManager extends QueryRelationManagerBase
 {
-//    public function with(
-//        string $relationName, string $relationAlias, ?string $parentClassName = null, string $joinType = 'left',
-//        ?string $extraJoinCondition = null, ?array $extraJoinParams = []
-//    ): self
-//    {
-//        $parentClassName = $parentClassName ?? $this->mainClassName;
-//
-//        if(!class_exists($parentClassName)) {
-//            throw new QueryRelationManagerException("class {$parentClassName} not exists");
-//        }
-//
-//        if(!isset($this->mapClassNameToTableAlias[$parentClassName])) {
-//            throw new QueryRelationManagerException("class {$parentClassName} not used in query");
-//        }
-//        $parentAlias = $this->mapClassNameToTableAlias[$parentClassName];
-//
-//        /** @var ActiveRecord $inst */
-//        $inst = new $parentClassName;
-//        if(!($inst instanceof ActiveRecord)) {
-//            throw new QueryRelationManagerException("class {$parentClassName} is not an instance of ActiveRecord");
-//        }
-//
-//        $methodName = 'get'.ucfirst($relationName);
-//        if(!method_exists($inst, $methodName)) {
-//            throw new QueryRelationManagerException("method {$parentClassName}::{$methodName}() not exists");
-//        }
-//
-//        /** @var ActiveQuery $activeQuery */
-//        $activeQuery = $inst->$methodName();
-//        if(!($activeQuery instanceof ActiveQuery)) {
-//            throw new QueryRelationManagerException("method {$parentClassName}::{$methodName}() returned non-ActiveQuery instance");
-//        }
-//
-//        if($activeQuery->via) {
-//            throw new QueryRelationManagerException('cannot use relations with "via" section yet');
-//        }
-//        if(!$activeQuery->link || !count($activeQuery->link)) {
-//            throw new QueryRelationManagerException('cannot use relations without "link" section');
-//        }
-//
-//        $fieldJoinBy = null;
-//        $fieldJoinTo = null;
-//        $extraConditions = [];
-//        foreach($activeQuery->link as $key => $val) {
-//            if($fieldJoinBy === null) {
-//                $fieldJoinBy = $key;
-//                $fieldJoinTo = $val;
-//            } else {
-//                $extraConditions[] = "{$relationAlias}.{$key} = {$parentAlias}.{$val}";
-//            }
-//        }
-//        if(count($extraConditions)) {
-//            $extraJoinCondition = implode(' AND ', $extraConditions)." {$extraJoinCondition}";
-//        }
-//
-//        if($activeQuery->multiple) {
-//            return $this->withMultiple(
-//                $relationName, $activeQuery->modelClass, $relationAlias,
-//                $parentAlias, $fieldJoinBy, $fieldJoinTo, $joinType,
-//                $extraJoinCondition, $extraJoinParams, $activeQuery->modelClass::primaryKey()[0]
-//            );
-//        } else {
-//            return $this->withSingle(
-//                $relationName, $activeQuery->modelClass, $relationAlias,
-//                $parentAlias, $fieldJoinBy, $fieldJoinTo, $joinType,
-//                $extraJoinCondition, $extraJoinParams, $activeQuery->modelClass::primaryKey()[0]
-//            );
-//        }
-//    }
+    /**
+     * @param string $relationName
+     * @param string $relationAlias
+     * @param string|null $parentAlias
+     * @param string $joinType
+     * @param string|null $extraJoinCondition
+     * @param array|null $extraJoinParams
+     * @return $this
+     * @throws QueryRelationManagerException
+     */
+    public function with(
+        string $relationName, string $relationAlias, ?string $parentAlias = null, string $joinType = 'left',
+        ?string $extraJoinCondition = null, ?array $extraJoinParams = []
+    ): self
+    {
+        $mainTable = $this->tableManager->getMainTable();
+
+        $parentAlias = $parentAlias ?? $mainTable->alias;
+        $parentClassName = $this->tableManager->byAlias($parentAlias)->className;
+
+        if(!class_exists($parentClassName)) {
+            throw new QueryRelationManagerException("class {$parentClassName} not exists");
+        }
+
+        /** @var ActiveRecord $inst */
+        $inst = new $parentClassName;
+        if(!($inst instanceof ActiveRecord)) {
+            throw new QueryRelationManagerException("class {$parentClassName} is not an instance of ActiveRecord");
+        }
+
+        $methodName = 'get'.ucfirst($relationName);
+        if(!method_exists($inst, $methodName)) {
+            throw new QueryRelationManagerException("method {$parentClassName}::{$methodName}() not exists");
+        }
+
+        /** @var ActiveQuery $activeQuery */
+        $activeQuery = $inst->$methodName();
+        if(!($activeQuery instanceof ActiveQuery)) {
+            throw new QueryRelationManagerException("method {$parentClassName}::{$methodName}() returned non-ActiveQuery instance");
+        }
+
+        if($activeQuery->via) {
+            throw new QueryRelationManagerException('cannot use relations with "via" section yet');
+        }
+        if(!$activeQuery->link || !count($activeQuery->link)) {
+            throw new QueryRelationManagerException('cannot use relations without "link" section');
+        }
+
+        if($activeQuery->multiple) {
+            return $this->withMultiple(
+                $relationName, $activeQuery->modelClass, $relationAlias,
+                $parentAlias, $activeQuery->link, $joinType,
+                $extraJoinCondition, $extraJoinParams
+            );
+        } else {
+            return $this->withSingle(
+                $relationName, $activeQuery->modelClass, $relationAlias,
+                $parentAlias, $activeQuery->link, $joinType,
+                $extraJoinCondition, $extraJoinParams
+            );
+        }
+    }
 
     /**
      * Возвращает имя таблицы по классу сущности ActiveRecord

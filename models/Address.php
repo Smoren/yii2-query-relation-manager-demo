@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\qrm\ActiveRecord\ActiveRecordTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -17,6 +18,8 @@ use yii\db\ActiveRecord;
  */
 class Address extends ActiveRecord
 {
+    use ActiveRecordTrait;
+
     public static function primaryKey()
     {
         return ['id', 'city_id'];

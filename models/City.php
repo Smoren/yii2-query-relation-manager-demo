@@ -2,11 +2,9 @@
 
 namespace app\models;
 
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
+use app\qrm\ActiveRecord\ActiveRecordTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 
 /**
  * This is the model class for table "city".
@@ -18,6 +16,8 @@ use yii\db\Query;
  */
 class City extends ActiveRecord
 {
+    use ActiveRecordTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -54,19 +54,5 @@ class City extends ActiveRecord
     public function getAddresses()
     {
         return $this->hasMany(Address::class, ['city_id' => 'id']);
-    }
-
-    /**
-     * @param string|null $alias
-     * @return QueryRelationManager
-     * @throws QueryRelationManagerException
-     */
-    public static function select(?string $alias = null): QueryRelationManager
-    {
-        // TODO multiple PK
-        // TODO trait
-        return QueryRelationManager::select(
-            self::class, $alias ?? self::tableName(), self::primaryKey()[0], self::primaryKey()[0]
-        );
     }
 }

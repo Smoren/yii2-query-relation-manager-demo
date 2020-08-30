@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\qrm\ActiveRecord\ActiveRecordTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -18,6 +19,8 @@ use yii\db\ActiveRecord;
  */
 class Comment extends ActiveRecord
 {
+    use ActiveRecordTrait;
+
     /**
      * {@inheritdoc}
      */
