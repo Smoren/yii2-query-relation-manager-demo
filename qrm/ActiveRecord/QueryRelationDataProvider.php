@@ -55,7 +55,7 @@ class QueryRelationDataProvider extends BaseDataProvider
 
             $pagination->totalCount = $this->getTotalCount();
 
-            $mainTable = $this->queryRelationManager->getTableManager()->getMainTable();
+            $mainTable = $this->queryRelationManager->getTableCollection()->getMainTable();
             $pkFields = $mainTable->getPrimaryKeyForSelect();
 
             if(count($pkFields) === 1) {
@@ -137,7 +137,7 @@ class QueryRelationDataProvider extends BaseDataProvider
         return $this->queryRelationManager
             ->prepare()
             ->getQuery()
-            ->select($this->queryRelationManager->getTableManager()->getMainTable()->getPrimaryKeyForSelect())
+            ->select($this->queryRelationManager->getTableCollection()->getMainTable()->getPrimaryKeyForSelect())
             ->distinct()
             ->count();
     }

@@ -17,27 +17,27 @@ use app\qrm\Base\Helpers\TableCollection;
 abstract class QueryRelationManagerBase
 {
     /**
-     * @var QueryWrapperInterface хранит объект билдера запроса
+     * @var QueryWrapperInterface объект билдера запроса
      */
     protected $query;
 
     /**
-     * @var JoinConditionCollection
+     * @var JoinConditionCollection коллекция отношений в запросе
      */
-    protected $joinConditionManager;
+    protected $joinConditionCollection;
 
     /**
-     * @var TableCollection
+     * @var TableCollection коллекция таблиц, участвующих в запросе
      */
-    protected $tableManager;
+    protected $tableCollection;
 
     /**
-     * @var callable[]
+     * @var callable[] массив функций-коллбэков для внесения дополнительных корректив в запров
      */
     protected $filters = [];
 
     /**
-     * @var callable[]
+     * @var callable[] карта функций-коллбэков по псевдониму таблицы для внесения изменений в готовые данные результата
      */
     protected $modifierMap = [];
 
@@ -59,8 +59,8 @@ abstract class QueryRelationManagerBase
      * @param string $className имя класса ActiveRecord, сущности которого нужно подключить
      * @param string $joinAs псевдоним для таблицы, связанной с классом
      * @param string $joinTo псевдоним таблицы, к которой будут подключаться сущности класса
-     * @param array $joinCondition
-     * @param string $joinType тип присоединения таблицы (inner, left, right, outer)
+     * @param array $joinCondition основное условие присоединения
+     * @param string $joinType тип присоединения таблицы ("inner", "left", "right")
      * @param string|null $extraJoinCondition дополнительные условия join-связи
      * @param array $extraJoinParams параметры дополнительных условий join-связи
      * @return $this
@@ -77,10 +77,10 @@ abstract class QueryRelationManagerBase
             $this->getTableFields($className), $this->getPrimaryKey($className), $containerFieldAlias
         );
 
-        $this->tableManager->add($table);
+        $this->tableCollection->add($table);
 
-        $this->joinConditionManager->add(new JoinCondition(
-            JoinCondition::TYPE_SINGLE, $table, $this->tableManager->byAlias($joinTo),
+        $this->joinConditionCollection->add(new JoinCondition(
+            JoinCondition::TYPE_SINGLE, $table, $this->tableCollection->byAlias($joinTo),
             $joinCondition, $joinType, $extraJoinCondition, $extraJoinParams
         ));
 
@@ -93,8 +93,8 @@ abstract class QueryRelationManagerBase
      * @param string $className имя класса ActiveRecord, сущности которого нужно подключить
      * @param string $joinAs псевдоним для таблицы, связанной с классом
      * @param string $joinTo псевдоним таблицы, к которой будут подключаться сущности класса
-     * @param array $joinCondition
-     * @param string $joinType тип присоединения таблицы (inner, left, right, outer)
+     * @param array $joinCondition основное условие присоединения
+     * @param string $joinType тип присоединения таблицы ("inner", "left", "right")
      * @param string|null $extraJoinCondition дополнительные условия join-связи
      * @param array $extraJoinParams параметры дополнительных условий join-связи
      * @return $this
@@ -111,10 +111,10 @@ abstract class QueryRelationManagerBase
             $this->getTableFields($className), $this->getPrimaryKey($className), $containerFieldAlias
         );
 
-        $this->tableManager->add($table);
+        $this->tableCollection->add($table);
 
-        $this->joinConditionManager->add(new JoinCondition(
-            JoinCondition::TYPE_MULTIPLE, $table, $this->tableManager->byAlias($joinTo),
+        $this->joinConditionCollection->add(new JoinCondition(
+            JoinCondition::TYPE_MULTIPLE, $table, $this->tableCollection->byAlias($joinTo),
             $joinCondition, $joinType, $extraJoinCondition, $extraJoinParams
         ));
 
@@ -159,17 +159,17 @@ abstract class QueryRelationManagerBase
         $rows = $this->query->all($db);
 
         $map = [];
-        $this->tableManager->each(function(Table $table) use (&$map) {
+        $this->tableCollection->each(function(Table $table) use (&$map) {
             $map[$table->alias] = [];
         });
 
         $bufMap = [];
 
         foreach($rows as $row) {
-            $this->tableManager->each(function(Table $table) use (&$map, &$row, &$bufMap) {
+            $this->tableCollection->each(function(Table $table) use (&$map, &$row, &$bufMap) {
                 try {
                     [$item, $pkValue, $alias, $aliasTo, $fkValue, $containerFieldAlias, $type]
-                        = $table->getDataFromRow($row, $this->joinConditionManager);
+                        = $table->getDataFromRow($row, $this->joinConditionCollection);
 
                     if(!isset($map[$alias][$pkValue])) {
                         $map[$alias][$pkValue] = &$item;
@@ -208,7 +208,7 @@ abstract class QueryRelationManagerBase
             unset($item);
         }
 
-        return array_values($map[$this->tableManager->getMainTable()->alias]);
+        return array_values($map[$this->tableCollection->getMainTable()->alias]);
     }
 
     /**
@@ -221,20 +221,20 @@ abstract class QueryRelationManagerBase
         $this->query = $this->createQuery();
 
         $arSelect = [];
-        $this->tableManager->each(function(Table $table) use (&$arSelect) {
+        $this->tableCollection->each(function(Table $table) use (&$arSelect) {
             foreach($table->getFieldMap() as $fieldName => $fieldNamePrefixed) {
                 $arSelect[$fieldNamePrefixed] = $fieldName;
             }
         });
 
-        $mainTable = $this->tableManager->getMainTable();
+        $mainTable = $this->tableCollection->getMainTable();
 
         $this->query
             ->select($arSelect)
             ->from([$mainTable->alias => $mainTable->name]);
 
 
-        $this->joinConditionManager->each(function(JoinCondition $cond) {
+        $this->joinConditionCollection->each(function(JoinCondition $cond) {
             $this->query->join(
                 $cond->joinType, [$cond->table->alias => $cond->table->name], $cond->stringify(), $cond->extraJoinParams
             );
@@ -248,9 +248,13 @@ abstract class QueryRelationManagerBase
         return $this->query;
     }
 
-    public function getTableManager(): TableCollection
+    /**
+     * Возвращает коллекцию объектов таблиц, участвующих в запросе
+     * @return TableCollection
+     */
+    public function getTableCollection(): TableCollection
     {
-        return $this->tableManager;
+        return $this->tableCollection;
     }
 
     /**
@@ -301,10 +305,10 @@ abstract class QueryRelationManagerBase
      */
     protected function __construct(string $className, string $alias)
     {
-        $this->tableManager = new TableCollection();
-        $this->joinConditionManager = new JoinConditionCollection();
+        $this->tableCollection = new TableCollection();
+        $this->joinConditionCollection = new JoinConditionCollection();
 
-        $this->tableManager->add(new Table(
+        $this->tableCollection->add(new Table(
             $className, $this->getTableName($className), $alias,
             $this->getTableFields($className), $this->getPrimaryKey($className)
         ));

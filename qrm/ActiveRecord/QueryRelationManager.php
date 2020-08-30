@@ -33,10 +33,10 @@ class QueryRelationManager extends QueryRelationManagerBase
         ?string $extraJoinCondition = null, ?array $extraJoinParams = []
     ): self
     {
-        $mainTable = $this->tableManager->getMainTable();
+        $mainTable = $this->tableCollection->getMainTable();
 
         $parentAlias = $parentAlias ?? $mainTable->alias;
-        $parentClassName = $this->tableManager->byAlias($parentAlias)->className;
+        $parentClassName = $this->tableCollection->byAlias($parentAlias)->className;
 
         if(!class_exists($parentClassName)) {
             throw new QueryRelationManagerException("class {$parentClassName} not exists");
