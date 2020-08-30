@@ -17,6 +17,11 @@ use yii\db\ActiveRecord;
  */
 class Address extends ActiveRecord
 {
+    public static function primaryKey()
+    {
+        return ['id', 'city_id'];
+    }
+
     /**
      * {@inheritdoc}
      */
