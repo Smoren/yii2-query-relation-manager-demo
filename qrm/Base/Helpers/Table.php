@@ -6,56 +6,62 @@ namespace app\qrm\Base\Helpers;
 
 use app\qrm\Base\QueryRelationManagerException;
 
+/**
+ * Class Table
+ * Класс-хранилище данных о таблице, которая участвует в запросе
+ * @package app\qrm\Base\Helpers
+ */
 class Table
 {
     /**
-     * @var string
+     * @var string ORM-класс, представляющий таблицу
      */
     public $className;
 
     /**
-     * @var string
+     * @var string имя таблицы в БД
      */
     public $name;
 
     /**
-     * @var string
+     * @var string псевдоним таблицы в запросе
      */
     public $alias;
 
     /**
-     * @var string[]
+     * @var string[] поля первичного ключа таблицы
      */
     public $primaryKey;
 
     /**
-     * @var string
+     * @var string поле-контейнер у родительского элемента, в который будет помещен элемент этой таблицы
      */
     public $containerFieldAlias;
 
     /**
-     * @var array
+     * @var array карта полей таблицы ["`псевдонимТаблицы`.`имяПоля`" => "псевдонимТаблицы_имяПоля", ...]
      */
     protected $fieldMap = [];
 
     /**
-     * @var array
+     * @var array обратная карта полей таблицы ["псевдонимТаблицы_имяПоля" => "имяПоля"]
      */
     protected $fieldMapReverse = [];
 
     /**
-     * @var array
+     * @var array обратная карта полей, составляющих первичный ключ таблицы
+     * Пример: ["псевдонимТаблицы_имяПоля" => "имяПоля"]
      */
     protected $pkFieldMapReverse = [];
 
     /**
      * Table constructor.
-     * @param string $className
-     * @param string $name
-     * @param string $alias
-     * @param array $fields
-     * @param array $primaryKey
-     * @param string $containerFieldAlias
+     * @param string $className ORM-класс, представляющий таблицу
+     * @param string $name имя таблицы в БД
+     * @param string $alias псевдоним таблицы в запросе
+     * @param array $fields список имен полей таблицы
+     * @param array $primaryKey поля первичного ключа таблицы
+     * @param string $containerFieldAlias поле-контейнер у родительского элемента, в который будет помещен элемент этой таблицы
      * @throws QueryRelationManagerException
      */
     public function __construct(
@@ -84,6 +90,7 @@ class Table
     }
 
     /**
+     * Возвращает карту полей таблицы ["`псевдонимТаблицы`.`имяПоля`" => "псевдонимТаблицы_имяПоля", ...]
      * @return string[]
      */
     public function getFieldMap(): array
@@ -92,7 +99,8 @@ class Table
     }
 
     /**
-     * @param string $fieldPrefixed
+     * Возвращает имя поля по его имени с префиксом
+     * @param string $fieldPrefixed имя поля с префиксом (псевдонимом таблицы)
      * @return string
      */
     public function getField(string $fieldPrefixed): string
@@ -101,6 +109,7 @@ class Table
     }
 
     /**
+     * Возвращает строку, состоящую из полей первичного ключа таблицы, разделенных дефисом
      * @return string
      */
     public function stringifyPrimaryKey(): string
@@ -109,12 +118,21 @@ class Table
     }
 
     /**
-     * @param array $row
-     * @param JoinConditionManager $conditionManager
-     * @return array
+     * Получение данных из кортежа, представляющего из себя строку из результата запроса к БД
+     * @param array $row строка из результата запроса SELECT
+     * @param JoinConditionCollection $conditionCollection коллекция условий запроса
+     * @return array [
+     *  "данные из строки, соотвествующие таблице",
+     *  "значения полей первичного ключа через дефис",
+     *  "псевдоним этой таблицы",
+     *  "псевдоним таблицы, к которой осуществляется присоединение",
+     *  "значения полей внешнего ключа через дефис",
+     *  "поле-контейнер у родительского элемента, в который будет помещен элемент этой таблицы",
+     *  "тип отношения к родительской таблице (1 — "один к одному" или 2 — "один ко многим")"
+     * ]
      * @throws QueryRelationManagerException
      */
-    public function getDataFromRow(array $row, JoinConditionManager $conditionManager): array
+    public function getDataFromRow(array $row, JoinConditionCollection $conditionCollection): array
     {
         $item = [];
 
@@ -125,7 +143,7 @@ class Table
         }
 
         /** @var JoinCondition $cond */
-        foreach($conditionManager->byJoinTo($this->alias) as $cond) {
+        foreach($conditionCollection->byJoinTo($this->alias) as $cond) {
             switch($cond->type) {
                 case JoinCondition::TYPE_MULTIPLE:
                     $item[$cond->table->containerFieldAlias] = [];
@@ -141,7 +159,7 @@ class Table
         $primaryKeyValue = $this->stringifyPrimaryKeyValue($row);
 
         try {
-            $cond = $conditionManager->byJoinAs($this->alias);
+            $cond = $conditionCollection->byJoinAs($this->alias);
             $joinTo = $cond->joinTo;
             $aliasTo = $joinTo->alias;
             $foreignKeyValue = $joinTo->stringifyPrimaryKeyValue($row);
@@ -157,6 +175,7 @@ class Table
     }
 
     /**
+     * Получение списка полей первичного ключа таблицы с префиксом-псевдонимом таблицы через точку
      * @return array
      */
     public function getPrimaryKeyForSelect(): array
@@ -170,7 +189,8 @@ class Table
     }
 
     /**
-     * @param array $row
+     * Получение значений полей первичного ключа таблицы в виде строки через дефис
+     * @param array $row строка из результата запроса SELECT
      * @return string
      * @throws QueryRelationManagerException
      */

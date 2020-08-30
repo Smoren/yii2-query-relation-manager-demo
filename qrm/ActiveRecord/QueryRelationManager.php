@@ -18,12 +18,13 @@ use yii\db\ActiveRecord;
 class QueryRelationManager extends QueryRelationManagerBase
 {
     /**
-     * @param string $relationName
-     * @param string $relationAlias
-     * @param string|null $parentAlias
-     * @param string $joinType
-     * @param string|null $extraJoinCondition
-     * @param array|null $extraJoinParams
+     * Подключение отношения таблицы к запросу, используя данные из модели ActiveRecord
+     * @param string $relationName имя отношения, прописанное в модели ActiveRecord
+     * @param string $relationAlias псевдоним присоединяемой таблицы
+     * @param string|null $parentAlias псевдоним таблицы, к которой очуществляется присоединение (по умолчанию — основная таблица запроса)
+     * @param string $joinType тип присоединения ("inner", "left", "right")
+     * @param string|null $extraJoinCondition дополнительные условия присоединения
+     * @param array|null $extraJoinParams динамические значения дополнительных условий присодинения
      * @return $this
      * @throws QueryRelationManagerException
      */
@@ -106,7 +107,7 @@ class QueryRelationManager extends QueryRelationManagerBase
 
     /**
      * Возвращает список полей таблицы
-     * @param string $className
+     * @param string $className имя класса ORM-модели
      * @return array
      * @throws QueryRelationManagerException
      */
@@ -125,7 +126,7 @@ class QueryRelationManager extends QueryRelationManagerBase
 
     /**
      * Возвращает поля первичного ключа таблицы
-     * @param string $className
+     * @param string $className имя класса ORM-модели
      * @return array
      * @throws QueryRelationManagerException
      */

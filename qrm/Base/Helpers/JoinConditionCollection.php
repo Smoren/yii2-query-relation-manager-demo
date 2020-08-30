@@ -6,20 +6,26 @@ namespace app\qrm\Base\Helpers;
 
 use app\qrm\Base\QueryRelationManagerException;
 
-class JoinConditionManager
+/**
+ * Class JoinConditionManager
+ * Класс-коллекция объектов условий присоединения
+ * @package app\qrm\Base\Helpers
+ */
+class JoinConditionCollection
 {
     /**
-     * @var JoinCondition[]
+     * @var JoinCondition[] карта объектов условий присоединения по псевдониму присоединяемой таблицы
      */
     protected $mapByJoinAs = [];
 
     /**
-     * @var JoinCondition[][]
+     * @var JoinCondition[][] катра спика объектов условий присоединения по псевдониму таблицы, к которой осуществляется присоединение
      */
     protected $matrixByJoinTo = [];
 
     /**
-     * @param JoinCondition $condition
+     * Добавление объекта условия присоединения таблицы
+     * @param JoinCondition $condition условие присоединения таблицы
      * @return $this
      * @throws QueryRelationManagerException
      */
@@ -42,7 +48,8 @@ class JoinConditionManager
     }
 
     /**
-     * @param string $joinAs
+     * Получение объекта условия присоединения таблицы по ее псевдониму в запросе
+     * @param string $joinAs псевдоним присоединяемой таблицы
      * @return JoinCondition
      * @throws QueryRelationManagerException
      */
@@ -55,7 +62,8 @@ class JoinConditionManager
     }
 
     /**
-     * @param string $joinTo
+     * Получение списка объекта условий присоединения таблиц по псевдониму таблицы, к которой осуществляется присоединение
+     * @param string $joinTo псевдоним таблицы, к которой осуществляется присоединение
      * @return JoinCondition[]
      */
     public function byJoinTo(string $joinTo): array
@@ -67,7 +75,8 @@ class JoinConditionManager
     }
 
     /**
-     * @param callable $callback
+     * Перебор коллекции
+     * @param callable $callback функция, которая будет запущена для каждого элемента коллекции с передачей оного в качестве аргумента
      * @return $this
      */
     public function each(callable $callback): self

@@ -9,6 +9,11 @@ use yii\data\BaseDataProvider;
 use yii\db\Connection;
 use yii\db\Query;
 
+/**
+ * Class QueryRelationDataProvider
+ * DataProvider для запросов QueryRelationManager
+ * @package app\qrm\ActiveRecord
+ */
 class QueryRelationDataProvider extends BaseDataProvider
 {
     /**

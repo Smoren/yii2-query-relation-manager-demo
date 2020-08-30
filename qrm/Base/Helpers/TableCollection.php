@@ -6,30 +6,36 @@ namespace app\qrm\Base\Helpers;
 
 use app\qrm\Base\QueryRelationManagerException;
 
-class TableManager
+/**
+ * Class TableCollection
+ * Класс-коллекция объектов таблиц, участвующих в запросе
+ * @package app\qrm\Base\Helpers
+ */
+class TableCollection
 {
     /**
-     * @var Table
+     * @var Table объект главной таблицы запроса
      */
     protected $mainTable;
 
     /**
-     * @var Table[]
+     * @var Table[] карта объектов таблиц по имени класса ORM-модели
      */
     protected $mapByClassName = [];
 
     /**
-     * @var Table[]
+     * @var Table[] карта объектов таблиц по имени таблицы
      */
     protected $mapByName = [];
 
     /**
-     * @var Table[]
+     * @var Table[] карта объектов таблиц по псевдониму таблицы в запросе
      */
     protected $mapByAlias = [];
 
     /**
-     * @param Table $table
+     * Добавление объекта таблицы в коллецию
+     * @param Table $table таблица, участвующая в запросе
      * @return $this
      * @throws QueryRelationManagerException
      */
@@ -47,6 +53,7 @@ class TableManager
     }
 
     /**
+     * Получение объекта главной таблицы запроса
      * @return Table
      * @throws QueryRelationManagerException
      */
@@ -60,7 +67,8 @@ class TableManager
     }
 
     /**
-     * @param string $className
+     * Получение объекта таблицы по имени класса ее ORM-модели
+     * @param string $className имя класса ORM-модели таблицы
      * @return Table
      * @throws QueryRelationManagerException
      */
@@ -70,7 +78,8 @@ class TableManager
     }
 
     /**
-     * @param string $name
+     * Получение объекта таблицы по ее имени в БД
+     * @param string $name имя таблицы в БД
      * @return Table
      * @throws QueryRelationManagerException
      */
@@ -80,7 +89,8 @@ class TableManager
     }
 
     /**
-     * @param string $alias
+     * Получение объекта таблицы по ее псевдониму в запросе
+     * @param string $alias псевдоним таблицы в запросе
      * @return Table
      * @throws QueryRelationManagerException
      */
@@ -90,7 +100,8 @@ class TableManager
     }
 
     /**
-     * @param callable $callback
+     * Перебор коллекции
+     * @param callable $callback функция, которая будет запущена для каждого элемента коллекции с передачей оного в качестве аргумента
      * @return $this
      */
     public function each(callable $callback): self
@@ -102,9 +113,10 @@ class TableManager
     }
 
     /**
-     * @param string $mapName
-     * @param string $key
-     * @param Table $table
+     * Добавление объекта таблицы в карту
+     * @param string $mapName имя члена класса-карты
+     * @param string $key ключ в карте
+     * @param Table $table объект таблицы
      * @return $this
      * @throws QueryRelationManagerException
      */
@@ -119,8 +131,9 @@ class TableManager
     }
 
     /**
-     * @param string $mapName
-     * @param string $key
+     * Получение объекта таблицы из карты
+     * @param string $mapName имя члена класса-карты
+     * @param string $key ключ в карте
      * @return Table
      * @throws QueryRelationManagerException
      */

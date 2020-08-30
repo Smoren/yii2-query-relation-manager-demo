@@ -5,9 +5,9 @@ namespace app\qrm\Base;
 
 
 use app\qrm\Base\Helpers\JoinCondition;
-use app\qrm\Base\Helpers\JoinConditionManager;
+use app\qrm\Base\Helpers\JoinConditionCollection;
 use app\qrm\Base\Helpers\Table;
-use app\qrm\Base\Helpers\TableManager;
+use app\qrm\Base\Helpers\TableCollection;
 
 /**
  * Class for making queries for getting data from database with relations and filters
@@ -22,12 +22,12 @@ abstract class QueryRelationManagerBase
     protected $query;
 
     /**
-     * @var JoinConditionManager
+     * @var JoinConditionCollection
      */
     protected $joinConditionManager;
 
     /**
-     * @var TableManager
+     * @var TableCollection
      */
     protected $tableManager;
 
@@ -248,7 +248,7 @@ abstract class QueryRelationManagerBase
         return $this->query;
     }
 
-    public function getTableManager(): TableManager
+    public function getTableManager(): TableCollection
     {
         return $this->tableManager;
     }
@@ -301,8 +301,8 @@ abstract class QueryRelationManagerBase
      */
     protected function __construct(string $className, string $alias)
     {
-        $this->tableManager = new TableManager();
-        $this->joinConditionManager = new JoinConditionManager();
+        $this->tableManager = new TableCollection();
+        $this->joinConditionManager = new JoinConditionCollection();
 
         $this->tableManager->add(new Table(
             $className, $this->getTableName($className), $alias,

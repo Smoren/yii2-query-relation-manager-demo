@@ -5,8 +5,7 @@ namespace app\qrm\Base;
 
 /**
  * Class QueryRelationManagerException
- * @package Smoren\Yii2\QueryRelationManager
- * @author Smoren <ofigate@gmail.com>
+ * @package app\qrm\Base
  */
 class QueryRelationManagerException extends \Exception
 {

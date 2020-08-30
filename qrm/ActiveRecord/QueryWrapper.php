@@ -7,9 +7,15 @@ namespace app\qrm\ActiveRecord;
 
 use app\qrm\Base\QueryWrapperInterface;
 
+/**
+ * Class QueryWrapper
+ * Класс-обертка для ActiveQuery
+ * @package app\qrm\ActiveRecord
+ */
 class QueryWrapper implements QueryWrapperInterface
 {
     /**
+     * Объект ActiveQuery
      * @var \yii\db\Query
      */
     protected $query;
