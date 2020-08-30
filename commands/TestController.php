@@ -141,4 +141,17 @@ class TestController extends Controller
 
         print_r($result);
     }
+
+    /**
+     * @throws QueryRelationManagerException
+     */
+    public function actionWith()
+    {
+        $cities = City::select('c')
+            ->with('addresses', 'a')
+            ->with('places', 'p', Address::class)
+            ->all();
+
+        print_r($cities);
+    }
 }
