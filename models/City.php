@@ -63,6 +63,8 @@ class City extends ActiveRecord
      */
     public static function select(?string $alias = null): QueryRelationManager
     {
+        // TODO multiple PK
+        // TODO trait
         return QueryRelationManager::select(
             self::class, $alias ?? self::tableName(), self::primaryKey()[0], self::primaryKey()[0]
         );
