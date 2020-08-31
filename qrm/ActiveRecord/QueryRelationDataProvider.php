@@ -81,17 +81,17 @@ class QueryRelationDataProvider extends BaseDataProvider
                     ->offset($offset)
                     ->all();
 
-                $models = $this->queryRelationManager->filter(function(Query $q) use ($pkValues, $mainTable) {
-                    $orWheres = ['OR'];
-                    foreach($pkValues as $rows) {
-                        $orWhere = [];
-                        foreach($rows as $field => $value) {
-                            $orWhere["`{$mainTable->alias}`.`$field`"] = $value;
-                        }
-                        $orWheres[] = $orWhere;
+                $pkValuesPrefixed = [];
+                foreach($pkValues as $row) {
+                    $rowPrefixed = [];
+                    foreach($row as $field => $value) {
+                        $rowPrefixed["`{$mainTable->alias}`.`{$field}`"] = $value;
                     }
+                    $pkValuesPrefixed[] = $rowPrefixed;
+                }
 
-                    $q->andWhere($orWheres);
+                $models = $this->queryRelationManager->filter(function(Query $q) use ($pkFields, $pkValuesPrefixed, $mainTable) {
+                    $q->andWhere(['in', $pkFields, $pkValuesPrefixed]);
                 })->all();
             }
         }

@@ -153,4 +153,10 @@ class NewController extends Controller
 
         print_r($result);
     }
+
+    public function actionTest()
+    {
+        $q = Address::find()->andWhere(['IN', ['id', 'city_id'], [['id' => 1, 'city_id' => 1], ['id' => 3, 'city_id' => 2]]])->createCommand()->getRawSql();
+        $a = 1;
+    }
 }
