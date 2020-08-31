@@ -12,22 +12,24 @@ use app\models\City;
 use app\models\Comment;
 use app\models\Place;
 use app\helpers\ProfilerHelper;
-use app\qrm\ActiveRecord\QueryRelationDataProvider;
-use app\qrm\ActiveRecord\QueryRelationManager;
-use app\qrm\Base\QueryRelationManagerException;
+use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationDataProvider;
+use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
+use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
 use Yii;
 use yii\console\Controller;
 use yii\data\ActiveDataProvider;
 use yii\db\Exception;
 
 /**
- * Контроллер для демонстрации работы QueryRelationManager
+ * Контроллер для профилирования QueryRelationManager
+ * @package app\commands
  * @author Smoren <ofigate@gmail.com>
  */
 class ProfileController extends Controller
 {
     /**
      * Выбираем адреса с городом, местами и комментариями о местах
+     * Сравниваем скорость работы ActiveQuery::joinWith и QueryRelationManager
      * @throws QueryRelationManagerException
      * @throws Exception
      */
@@ -56,7 +58,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * Выбираем адреса с городом, местами и комментариями о местах
+     * Выбираем адреса с городом, местами и комментариями о местах, используем DataProvider для постраничной навигации
+     * Сравниваем скорость работы ActiveQuery::joinWith и QueryRelationManager
      * @throws QueryRelationManagerException
      * @throws Exception
      */
@@ -127,6 +130,7 @@ class ProfileController extends Controller
     }
 
     /**
+     * Генерирует миллион адресов
      * @throws Exception
      */
     protected function genAddresses()
@@ -143,6 +147,7 @@ class ProfileController extends Controller
     }
 
     /**
+     * Удаляет сгенерированные адреса
      * @throws Exception
      */
     protected function delAddresses()
@@ -153,10 +158,11 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param string $who
-     * @param float $time
-     * @param int $foundCount
-     * @param int|null $totalCount
+     * Выводит данные профилирования в консоль
+     * @param string $who предмет замера
+     * @param float $time время работы
+     * @param int|null $foundCount найдено записей
+     * @param int|null $totalCount запрошено записей
      */
     protected function log(string $who, float $time, ?int $foundCount = null, ?int $totalCount = null)
     {
