@@ -14,6 +14,11 @@ composer install
 php yii migrate
 ```
 
+### Unit testing
+```
+./vendor/bin/codecept run unit tests/unit/CommonUsageTest.php
+```
+
 ### Demo
 
 Выбираем адреса с городом, местами и комментариями о местах
