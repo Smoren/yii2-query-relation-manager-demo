@@ -25,24 +25,24 @@ class WithController extends Controller
      */
     public function actionCity()
     {
-        $cities = City::select('c')
+        $result = City::select('c')
             ->with('addresses', 'a')
             ->with('places', 'p', 'a')
             ->all();
 
-        print_r($cities);
+        print_r($result);
     }
 
     /**
      * Выбираем адреса с городом, местами и комментариями, оценка которых не ниже трех
      * Используем упрощенный синтаксис with
      * Метод City::select() добавлен в класс с помощью трейта ActiveRecordTrait
-     * @see \Smoren\Yii2\QueryRelationManager\ActiveRecord\ActiveRecordTrait
+     * @see \Smoren\Yii2\QueryRelationManager\Yii2\ActiveRecordTrait
      * @throws QueryRelationManagerException
      */
     public function actionAddress()
     {
-        $cities = Address::select('a')
+        $result = Address::select('a')
             ->with('city', 'c')
             ->with('places', 'p')
             ->with(
@@ -51,6 +51,6 @@ class WithController extends Controller
             )
             ->all();
 
-        print_r($cities);
+        print_r($result);
     }
 }

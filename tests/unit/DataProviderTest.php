@@ -125,6 +125,11 @@ class DataProviderTest extends \Codeception\Test\Unit
         expect_that($this->compareResultWithCorrectMap($result, []));
     }
 
+    /**
+     * @param array $result
+     * @param array $correctMap
+     * @return bool
+     */
     protected function compareResultWithCorrectMap(array $result, array $correctMap)
     {
         $resultMap = [];
