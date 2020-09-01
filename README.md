@@ -16,7 +16,7 @@ php yii migrate
 
 ### Unit testing
 ```
-./vendor/bin/codecept run unit tests/unit/CommonUsageTest.php
+./vendor/bin/codecept run unit tests/unit
 ```
 
 ### Demo
