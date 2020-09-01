@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\ActiveRecordTrait;
+use Smoren\Yii2\QueryRelationManager\Yii2\ActiveRecordTrait;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 

@@ -20,7 +20,7 @@ class WithController extends Controller
      * Выбираем города с адресами и местами
      * Используем упрощенный синтаксис with
      * Метод City::select() добавлен в класс с помощью трейта ActiveRecordTrait
-     * @see \Smoren\Yii2\QueryRelationManager\ActiveRecord\ActiveRecordTrait
+     * @see \Smoren\Yii2\QueryRelationManager\Yii2\ActiveRecordTrait
      * @throws QueryRelationManagerException
      */
     public function actionCity()

@@ -11,7 +11,7 @@ use app\models\Address;
 use app\models\City;
 use app\models\Comment;
 use app\models\Place;
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
+use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationManager;
 use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
 use yii\console\Controller;
 use yii\db\Query;

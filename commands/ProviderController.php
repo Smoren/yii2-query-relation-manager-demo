@@ -6,8 +6,8 @@ namespace app\commands;
 
 use app\models\Address;
 use app\models\City;
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationDataProvider;
-use Smoren\Yii2\QueryRelationManager\ActiveRecord\QueryRelationManager;
+use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationDataProvider;
+use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationManager;
 use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
 use Yii;
 use yii\console\Controller;
