@@ -5,10 +5,7 @@ namespace app\tests\unit;
 
 use app\models\Address;
 use app\models\City;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
-use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationDataProvider;
-use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationManager;
-use Yii;
+use Smoren\QueryRelationManager\Base\QueryRelationManagerException;
 use yii\helpers\ArrayHelper;
 
 class WithSyntaxTest extends \Codeception\Test\Unit

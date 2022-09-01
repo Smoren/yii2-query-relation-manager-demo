@@ -6,8 +6,8 @@ use app\models\Address;
 use app\models\City;
 use app\models\Comment;
 use app\models\Place;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
-use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationManager;
+use Smoren\QueryRelationManager\Base\QueryRelationManagerException;
+use Smoren\QueryRelationManager\Yii2\QueryRelationManager;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 

@@ -5,9 +5,9 @@ namespace app\tests\unit;
 
 use app\models\Address;
 use app\models\City;
-use Smoren\Yii2\QueryRelationManager\Base\QueryRelationManagerException;
-use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationDataProvider;
-use Smoren\Yii2\QueryRelationManager\Yii2\QueryRelationManager;
+use Smoren\QueryRelationManager\Base\QueryRelationManagerException;
+use Smoren\QueryRelationManager\Yii2\QueryRelationDataProvider;
+use Smoren\QueryRelationManager\Yii2\QueryRelationManager;
 use Yii;
 
 class DataProviderTest extends \Codeception\Test\Unit
